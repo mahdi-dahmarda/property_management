@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_property_root" name="Property" sequence="1"/>
+        <menuitem id="menu_property_master" name="Property" sequence="1" parent="menu_property_root"/>
+    </data>
+</odoo>

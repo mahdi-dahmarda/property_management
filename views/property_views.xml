@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Property -->
+        <record id="view_property_tree" model="ir.ui.view">
+            <field name="name">property.tree</field>
+            <field name="model">property</field>
+            <field name="arch" type="xml">
+                <tree string="Properties" sample="1" multi_edit="1">
+                    <field name="display_name" string="Name"/>
+                    <field name="type"/>
+                    <field name="property_type"/>
+                    <field name="building_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_property_form" model="ir.ui.view">
+            <field name="name">property.form</field>
+            <field name="model">property</field>
+            <field name="arch" type="xml">
+                <form string="Property">
+                    <sheet>
+                        <field name="parent_id" invisible="1"/>
+                        <field name="is_root" invisible="1"/>
+                        <field name="type" widget="radio" options="{'horizontal': true}"
+                               attrs="{'invisible':['&amp;',('property_type','=','building'), ('is_root','=',False)]}"/>
+                        <br/>
+                        <field name="property_type" widget="radio" options="{'horizontal': true}"
+                               attrs="{'invisible': ['|','&amp;',('type', '!=', 'property'),('property_type','=','building'), ('is_root','=',False)]}"/>
+                        <br/>
+                        <field name="building_type" widget="radio" options="{'horizontal': true}"
+                               attrs="{'invisible': ['|',('property_type', '!=', 'building'), ('is_root', '=', True)]}"/>
+
+                        <field name="name" default_focus="1"/>
+
+                        <notebook colspan="4">
+                            <page string="Building Parts" name="building_parts" autofocus="autofocus">
+                                <field name="child_ids"
+                                       context="{'default_type': type, 'default_property_type': property_type, 'default_is_root': False, 'default_building_type': 'floor'}">
+                                    <tree editable="bottom">
+                                        <field name="building_type" />
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_property_form" model="ir.actions.act_window">
+            <field name="name">Properties</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">property</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem action="action_property_form" id="menu_property_action"
+                  parent="menu_property_master" sequence="1"/>
+    </data>
+</odoo>
